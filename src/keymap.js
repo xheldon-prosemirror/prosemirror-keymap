@@ -42,12 +42,18 @@ function modifiers(name, event, shift) {
 // :: (Object) → Plugin
 // Create a keymap plugin for the given set of bindings.
 //
+// @cn 用给定的绑定集合来创建一个按键映射插件。
+//
 // Bindings should map key names to [command](#commands)-style
 // functions, which will be called with `(EditorState, dispatch,
 // EditorView)` arguments, and should return true when they've handled
 // the key. Note that the view argument isn't part of the command
 // protocol, but can be used as an escape hatch if a binding needs to
 // directly interact with the UI.
+//
+// @cn 绑定应该将按键名和 [命令](#commands) 格式的函数对应起来，该函数将会传入 `(EditorState, dispatch,
+// EditorView)` 作为参数来调用，如果它响应了该按键按下，则应该返回 true。记住，view 参数并不是命令协议的一部分，但是如果按键绑定需要直接与 UI
+// 交互，则可以将其用来作为应急出口使用。
 //
 // Key names may be strings like `"Shift-Ctrl-Enter"`—a key
 // identifier prefixed with zero or more modifiers. Key identifiers
@@ -57,18 +63,29 @@ function modifiers(name, event, shift) {
 // if you want shift to be held). You may use `"Space"` as an alias
 // for the `" "` name.
 //
+// @cn 按键的名字可以是形如 `"Shift-Ctrl-Enter"` 的字符串，它是一个按键标识符，可以有 0 个或者多个修饰符做前缀。按键标识符的基础字符串基于这个
+// [`KeyEvent.key`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) 中的按键而来。使用小写字母来表示字母键
+// （或者使用大写字母，如果你想要处理 shift 被同时按下的情况）。你也许会使用 `"Space"` 作为 `" "` 的别名。
+//
 // Modifiers can be given in any order. `Shift-` (or `s-`), `Alt-` (or
 // `a-`), `Ctrl-` (or `c-` or `Control-`) and `Cmd-` (or `m-` or
 // `Meta-`) are recognized. For characters that are created by holding
 // shift, the `Shift-` prefix is implied, and should not be added
 // explicitly.
 //
+// @cn 修饰符可以以任何顺序给定。只允许 `Shift-`（或者 `s-`)，`Alt-`（或者 `a-`），`Ctrl-`（或 `c-` 或 `Control-`）及 `Cmd-`（或 `m-` 或 `Meta-`）
+// 这些修饰符出现。对于通过按下 shift 创建的字符，则 `Shift-` 前缀就是隐式的，不应该再显式添加了。
+//
 // You can use `Mod-` as a shorthand for `Cmd-` on Mac and `Ctrl-` on
 // other platforms.
+//
+// @cn 在 Mac 上你可以使用 `Mod-` 作为 `Cmd-` 的简称，在其他平台可以使用 `Ctrl-`。
 //
 // You can add multiple keymap plugins to an editor. The order in
 // which they appear determines their precedence (the ones early in
 // the array get to dispatch first).
+//
+// @cn 你可以在编辑器中添加多个按键映射插件。它们出现的顺序决定了它们的优先级（数组前面的优先被 dispatch）。
 export function keymap(bindings) {
   return new Plugin({props: {handleKeyDown: keydownHandler(bindings)}})
 }
@@ -77,6 +94,9 @@ export function keymap(bindings) {
 // Given a set of bindings (using the same format as
 // [`keymap`](#keymap.keymap), return a [keydown
 // handler](#view.EditorProps.handleKeyDown) that handles them.
+//
+// @cn 给定一个按键绑定的集合（和 [`keymap`](#keymap.keymap) 使用一样的格式），返回一个处理相应按键事件的 [按键
+// 处理函数](#view.EditorProps.handleKeyDown)。
 export function keydownHandler(bindings) {
   let map = normalize(bindings)
   return function(view, event) {
